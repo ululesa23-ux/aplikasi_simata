@@ -12,6 +12,7 @@ use App\Http\Controllers\DataController;
 use App\Http\Controllers\MapsController;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\UnitController;
+use App\Http\Controllers\DoaController;
 
 // =========================
 // Berita
@@ -101,3 +102,6 @@ Route::get('/prayer-times', [PrayerTimeController::class, 'getTimes']);
 // =========================
 Route::get('/data', [DataController::class, 'getData']);
 Route::get('/maps/route', [MapsController::class, 'getRoute']);
+
+Route::get('/doa-harian', [DoaController::class, 'index']);
+Route::get('/doa-harian/{id}', [DoaController::class, 'show']);
