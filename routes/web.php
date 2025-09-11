@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Http\Controllers\DataController;  // Import controller yang akan digunakan
+use App\Http\Controllers\VideoController; // Import VideoController
 
 // route default ke halaman welcome
 Route::get('/', function () {
@@ -64,3 +65,5 @@ Route::post('/login', function (Request $request) {
 
 // route untuk menampilkan data menggunakan controller
 Route::get('/api/data', [DataController::class, 'getData']);
+
+Route::get('/videos', [VideoController::class, 'index'])->name('videos.index');
