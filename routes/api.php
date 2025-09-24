@@ -13,6 +13,10 @@ use App\Http\Controllers\MapsController;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\DoaController;
+use App\Http\Controllers\Api\IjinController;
+use App\Http\Controllers\Api\PresensiController;
+use App\Http\Controllers\Api\LaporanPresensiController; // ✅ tambahan
+use App\Http\Controllers\Api\LaporanIjinController;     // ✅ tambahan
 
 // =========================
 // Berita
@@ -103,5 +107,35 @@ Route::get('/prayer-times', [PrayerTimeController::class, 'getTimes']);
 Route::get('/data', [DataController::class, 'getData']);
 Route::get('/maps/route', [MapsController::class, 'getRoute']);
 
-Route::get('/doa-harian', [DoaController::class, 'index']);
-Route::get('/doa-harian/{id}', [DoaController::class, 'show']);
+// =========================
+// Doa
+// =========================
+Route::get('/doa', [DoaController::class, 'index']);
+Route::get('/doa/{id}', [DoaController::class, 'show']);
+Route::post('/doa', [DoaController::class, 'store']);
+
+// =========================
+// Ijin CRUD
+// =========================
+Route::get('/ijins', [IjinController::class, 'index']);
+Route::post('/ijins', [IjinController::class, 'store']);
+Route::get('/ijins/{id}', [IjinController::class, 'show']);
+Route::put('/ijins/{id}', [IjinController::class, 'update']);
+Route::delete('/ijins/{id}', [IjinController::class, 'destroy']);
+
+// =========================
+// Presensi CRUD
+// =========================
+Route::post('/presensi', [PresensiController::class, 'store']);
+
+// =========================
+// LAPORAN PRESENSI & IJIN
+// =========================
+
+// PRESENSI
+Route::get('/laporan/presensi', [LaporanPresensiController::class, 'index']);
+Route::post('/laporan/presensi/generate', [LaporanPresensiController::class, 'generate']);
+
+// IJIN
+Route::get('/laporan/ijin', [LaporanIjinController::class, 'index']);
+Route::post('/laporan/ijin/generate', [LaporanIjinController::class, 'generate']);

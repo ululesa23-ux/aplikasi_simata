@@ -8,24 +8,58 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    // ========== Show Login Form ==========
+    public function showLoginForm()
+    {
+        return view('admin.login');
+    }
+
     // ========== Login User ==========
     public function login(Request $request)
     {
+        \Log::debug('Login attempt', [
+            'expectsJson' => $request->expectsJson(),
+            'method' => $request->method(),
+            'all' => $request->all()
+        ]);
+
         $request->validate([
             'username' => 'required',
             'password' => 'required',
-            'imei'     => 'required',
         ]);
 
         $user = User::where('username', $request->username)->first();
 
-        if (!$user || !Hash::check($request->password, $user->password) || $user->imei !== $request->imei) {
-            return response()->json([
-                'status'  => 'error',
-                'message' => 'Login gagal, data tidak valid'
-            ], 401);
+        \Log::debug('User found', ['user' => $user ? $user->toArray() : null]);
+
+        // SEMENTARA: Nonaktifkan pengecekan IMEI untuk testing login
+        // TODO: Aktifkan kembali pengecekan IMEI setelah data IMEI di database diperbaiki
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            \Log::debug('Login failed: invalid credentials', [
+                'user_exists' => $user ? true : false,
+                'password_check' => $user ? Hash::check($request->password, $user->password) : false,
+                'input_password' => $request->password,
+            ]);
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'status'  => 'error',
+                    'message' => 'Login gagal, data tidak valid'
+                ], 401);
+            } else {
+                return redirect()->back()->withErrors(['login_error' => 'Login gagal, data tidak valid']);
+            }
         }
 
+        \Log::debug('Login successful', ['user' => $user->toArray()]);
+
+        // For web login, authenticate the user
+        if (!$request->expectsJson()) {
+            \Auth::login($user);
+            \Log::debug('Web login: user authenticated', ['auth_check' => \Auth::check(), 'user_role' => $user->role]);
+            return redirect()->route('admin.dashboard');
+        }
+
+        // For API login
         return response()->json([
             'status'  => 'success',
             'message' => 'Login berhasil',
@@ -77,5 +111,11 @@ class AuthController extends Controller
             'data' => $createdUsers
         ]);
     }
-}
 
+    // ========== Web View: Logout ==========
+    public function logout()
+    {
+        session()->flush();
+        return redirect()->route('login')->with('success', 'Berhasil logout');
+    }
+}

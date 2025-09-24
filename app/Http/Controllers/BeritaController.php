@@ -12,11 +12,11 @@ class BeritaController extends Controller
         if ($request->wantsJson()) {
             return response()->json([
                 'status' => 'success',
-                'url' => 'https://www.detik.com/edu'
+                'url' => 'https://yayasansitpermata.blogspot.com/p/tentang-kami.html'
             ]);
         }
 
         // Kalau diakses via browser, langsung redirect ke website
-        return redirect()->away('https://www.detik.com/edu');
+        return redirect()->away('https://yayasansitpermata.blogspot.com/p/tentang-kami.html');
     }
 }
