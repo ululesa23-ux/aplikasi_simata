@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Daftar User</title>
+    <title>Daftar Nama User</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="container py-5">
@@ -19,6 +19,8 @@
         <thead>
             <tr>
                 <th>Username</th>
+                <th>IMEI</th>
+                <th>Dibuat</th>
                 <th>Aksi</th>
             </tr>
         </thead>
@@ -26,6 +28,8 @@
             @foreach($users as $user)
             <tr>
                 <td>{{ $user->username }}</td>
+                <td>{{ $user->imei ?? '-' }}</td>
+                <td>{{ $user->created_at->format('d/m/Y H:i') }}</td>
                 <td>
                     <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning btn-sm">Edit</a>
                     <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Yakin ingin menghapus user ini?');">
