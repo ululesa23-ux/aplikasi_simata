@@ -18,6 +18,7 @@ class User extends Authenticatable
         'password',
         'role',
         'imei',
+        'unit_id',
     ];
 
     protected $hidden = [
@@ -28,6 +29,12 @@ class User extends Authenticatable
     protected $casts = [
         'password' => 'hashed', // otomatis hash saat create/update
     ];
+
+    // Relationship to Unit
+    public function unit()
+    {
+        return $this->belongsTo(Unit::class);
+    }
 
     // Simpan user baru ke database
     public static function createUser($request)

@@ -9,17 +9,10 @@ class Unit extends Model
 {
     use HasFactory;
 
-    protected $table = 'units';
+    protected $fillable = ['nama_unit'];
 
-    protected $fillable = [
-        'nama_unit',
-        'kode_unit',
-        'deskripsi',
-    ];
-
-    // Relasi ke KalenderAkademik
-    public function kalenderAkademik()
+    public function users()
     {
-        return $this->hasMany(KalenderAkademik::class, 'unit_id');
+        return $this->hasMany(User::class, 'unit_id');
     }
 }

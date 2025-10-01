@@ -18,6 +18,8 @@ use App\Http\Controllers\Api\PresensiController;
 use App\Http\Controllers\Api\LaporanPresensiController; // ✅ tambahan
 use App\Http\Controllers\Api\LaporanIjinController;     // ✅ tambahan
 
+Route::post('/login', [AuthController::class, 'login']);
+
 // =========================
 // Berita
 // =========================
@@ -35,12 +37,7 @@ $users = [
         'imei'     => '000111222',
         'role'     => 'admin'
     ],
-    [
-        'username' => 'user1',
-        'password' => 'user123',
-        'imei'     => '1234567890',
-        'role'     => 'user'
-    ],
+  
 ];
 
 // login (POST)

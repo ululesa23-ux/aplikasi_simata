@@ -7,24 +7,21 @@ use Illuminate\Http\Request;
 
 class DoaController extends Controller
 {
-    // Ambil semua doa (gabungan API + DB lokal)
+    // ================= API =================
     public function index()
     {
-        // ambil doa dari database
         $localDoas = Doa::all();
-
         return response()->json([
             'local' => $localDoas
         ]);
     }
 
-    // Simpan doa baru
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'judul'       => 'required|string|max:255',
-            'arab'      => 'required|string',
-            'latin'       => 'required|string',
+            'judul'   => 'required|string|max:255',
+            'arab'    => 'required|string',
+            'latin'   => 'required|string',
             'artinya' => 'required|string',
         ]);
 
@@ -36,7 +33,6 @@ class DoaController extends Controller
         ], 201);
     }
 
-    // Lihat doa lokal berdasarkan id
     public function show($id)
     {
         $doa = Doa::find($id);
@@ -46,5 +42,60 @@ class DoaController extends Controller
         }
 
         return response()->json($doa);
+    }
+
+    // ================= WEB (Blade CRUD) =================
+    public function indexWeb()
+    {
+        $localDoas = Doa::all();
+        return view('doa.index', ['doas' => $localDoas]);
+    }
+
+    public function createWeb()
+    {
+        return view('doa.create');
+    }
+
+    public function storeWeb(Request $request)
+    {
+        $validated = $request->validate([
+            'judul'   => 'required|string|max:255',
+            'arab'    => 'required|string',
+            'latin'   => 'required|string',
+            'artinya' => 'required|string',
+        ]);
+
+        Doa::create($validated);
+
+        return redirect('/doa')->with('success', 'Doa berhasil ditambahkan!');
+    }
+
+    public function editWeb($id)
+    {
+        $doa = Doa::findOrFail($id);
+        return view('doa.edit', compact('doa'));
+    }
+
+    public function updateWeb(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'judul'   => 'required|string|max:255',
+            'arab'    => 'required|string',
+            'latin'   => 'required|string',
+            'artinya' => 'required|string',
+        ]);
+
+        $doa = Doa::findOrFail($id);
+        $doa->update($validated);
+
+        return redirect('/doa')->with('success', 'Doa berhasil diperbarui!');
+    }
+
+    public function destroyWeb($id)
+    {
+        $doa = Doa::findOrFail($id);
+        $doa->delete();
+
+        return redirect('/doa')->with('success', 'Doa berhasil dihapus!');
     }
 }
