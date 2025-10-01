@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard</title>
+    <title>Dashboard Kabid</title>
     <!-- AdminLTE CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
     <!-- Bootstrap 5 CSS -->
@@ -32,7 +32,7 @@
 
     <!-- Sidebar -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
-        <a href="{{ url('/dashboard') }}" class="brand-link">
+        <a href="{{ url('/kabid/dashboard') }}" class="brand-link">
             <span class="brand-text font-weight-light">Aplikasi</span>
         </a>
         <div class="sidebar">
@@ -41,16 +41,9 @@
                     @php
                         $role = Auth::user()->role ?? 'guest';
                         $menus = [
-                            'admin' => [
-                                ['url' => '/admin/users', 'icon' => 'fas fa-users', 'label' => 'Kelola User'],
-                                ['url' => '/inventaris', 'icon' => 'fas fa-boxes', 'label' => 'Kelola Inventaris'],
-                                ['url' => '/doa', 'icon' => 'fas fa-praying-hands', 'label' => 'Kelola Doa'], // ✅ tambahan doa
-                            ],
-                            'tu' => [
-                                ['url' => '/kalender', 'icon' => 'fas fa-calendar', 'label' => 'Kelola Kalender'],
-                            ],
                             'kabid' => [
                                 ['url' => '/verifikasi', 'icon' => 'fas fa-check-circle', 'label' => 'Verifikasi Data'],
+                                ['url' => '/laporan', 'icon' => 'fas fa-file-alt', 'label' => 'Laporan'],
                             ],
                         ];
                     @endphp
@@ -71,36 +64,25 @@
     <!-- Content Wrapper -->
     <div class="content-wrapper">
         <section class="content-header px-3 py-2">
-            <h1>Dashboard Utama</h1>
+            <h1>Dashboard Kabid</h1>
         </section>
 
         <section class="content px-3">
             <div class="row">
                 <div class="col-12">
                     <div class="card">
-                        <div class="card-header bg-primary text-white">
+                        <div class="card-header bg-info text-white">
                             <h3 class="card-title">Selamat datang, {{ Auth::user()->username }}</h3>
                         </div>
                         <div class="card-body">
                             <p><b>Role Anda:</b> {{ ucfirst(Auth::user()->role) }}</p>
 
-                            @if(Auth::user()->role === 'admin')
-                                <a href="{{ url('/admin/users') }}" class="btn btn-primary mb-2">
-                                    <i class="fas fa-users"></i> Kelola User
-                                </a>
-                                <a href="{{ url('/inventaris') }}" class="btn btn-success mb-2">
-                                    <i class="fas fa-boxes"></i> Kelola Inventaris
-                                </a>
-                                <a href="{{ url('/doa') }}" class="btn btn-warning mb-2">
-                                    <i class="fas fa-praying-hands"></i> Kelola Doa
-                                </a>
-                            @elseif(Auth::user()->role === 'tu')
-                                <a href="{{ url('/kalender') }}" class="btn btn-warning mb-2">
-                                    <i class="fas fa-calendar"></i> Kelola Kalender
-                                </a>
-                            @elseif(Auth::user()->role === 'kabid')
+                            @if(Auth::user()->role === 'kabid')
                                 <a href="{{ url('/verifikasi') }}" class="btn btn-info mb-2">
                                     <i class="fas fa-check-circle"></i> Verifikasi Data
+                                </a>
+                                <a href="{{ url('/laporan') }}" class="btn btn-secondary mb-2">
+                                    <i class="fas fa-file-alt"></i> Laporan
                                 </a>
                             @endif
                         </div>

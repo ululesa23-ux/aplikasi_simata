@@ -8,7 +8,11 @@ use App\Http\Controllers\VideoController;
 use App\Http\Controllers\InventarisController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\AuthController; // Tambahan
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UnitController;
+use App\Http\Controllers\TuController;
+use App\Http\Controllers\KabidController;
+use App\Http\Controllers\DoaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,7 +25,7 @@ Route::get('/', function () {
 
 /*
 |--------------------------------------------------------------------------
-| Testing & Utilities
+| Utilities (Debugging)
 |--------------------------------------------------------------------------
 */
 Route::get('/ping', fn () => 'pong');
@@ -36,45 +40,23 @@ Route::get('/check-db', function () {
 
 /*
 |--------------------------------------------------------------------------
-| API Login Testing (GET & POST)
-|--------------------------------------------------------------------------
-| Hanya untuk uji coba di Postman/browser.
-*/
-Route::get('/login-test', function (Request $request) {
-    return response()->json([
-        'status' => 'success',
-        'message' => 'Login GET berhasil (testing browser)',
-        'data' => $request->only(['email', 'password', 'imei'])
-    ]);
-});
-
-Route::post('/login-test', function (Request $request) {
-    $email = $request->input('email');
-    $password = $request->input('password');
-    $imei = $request->input('imei');
-
-    if ($email === 'adminnnnn@mail.com' && $password === 'admin0987' && $imei === '1234567890') {
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Login berhasil',
-            'data' => compact('email', 'imei')
-        ]);
-    }
-
-    return response()->json([
-        'status' => 'error',
-        'message' => 'Login gagal, data tidak valid'
-    ], 401);
-});
-
-/*
-|--------------------------------------------------------------------------
-| Web Login (Blade)
+| Login & Logout
 |--------------------------------------------------------------------------
 */
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+/*
+|--------------------------------------------------------------------------
+| Dashboard sesuai Role
+|--------------------------------------------------------------------------
+*/
+Route::middleware('auth')->group(function () {
+    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/tu/dashboard', [TuController::class, 'dashboard'])->name('tu.dashboard');
+    Route::get('/kabid/dashboard', [KabidController::class, 'dashboard'])->name('kabid.dashboard');
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -86,10 +68,10 @@ Route::get('/videos', [VideoController::class, 'index'])->name('videos.index');
 
 /*
 |--------------------------------------------------------------------------
-| Inventaris CRUD (Web View)
+| Inventaris CRUD
 |--------------------------------------------------------------------------
 */
-Route::prefix('inventaris')->group(function () {
+Route::prefix('inventaris')->middleware('auth')->group(function () {
     Route::get('/', [InventarisController::class, 'index'])->name('inventaris.index');
     Route::get('/create', [InventarisController::class, 'create'])->name('inventaris.create');
     Route::post('/', [InventarisController::class, 'store'])->name('inventaris.store');
@@ -104,14 +86,25 @@ Route::prefix('inventaris')->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'admin'])->group(function () {
+    // Admin dashboard
     Route::get('/admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
-    // CRUD User
-    Route::get('/admin/users', [UserController::class, 'index'])->name('users.index');
-    
-    // ganti URL create menjadi /admin/users/tambah
-    Route::get('/admin/users/tambah', [UserController::class, 'create'])->name('users.create');
-    
-    Route::post('/admin/users', [UserController::class, 'store'])->name('users.store');
+    // User CRUD (plural)
+    Route::resource('/admin/users', UserController::class);
+
+    // Unit CRUD
+    Route::get('/admin/units/create', [UnitController::class, 'create'])->name('units.create');
+    Route::post('/admin/units', [UnitController::class, 'store'])->name('units.store');
+});
+
+
+
+Route::prefix('doa')->group(function () {
+    Route::get('/', [DoaController::class, 'indexWeb'])->name('doa.index');       // daftar doa (Blade)
+    Route::get('/create', [DoaController::class, 'createWeb'])->name('doa.create'); // form tambah doa
+    Route::post('/', [DoaController::class, 'storeWeb'])->name('doa.store');      // simpan doa baru
+    Route::get('/{id}/edit', [DoaController::class, 'editWeb'])->name('doa.edit');// form edit doa
+    Route::put('/{id}', [DoaController::class, 'updateWeb'])->name('doa.update'); // update doa
+    Route::delete('/{id}', [DoaController::class, 'destroyWeb'])->name('doa.destroy'); // hapus doa
 });
 

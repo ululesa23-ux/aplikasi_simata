@@ -21,9 +21,10 @@
     <div class="card-body login-card-body">
       <p class="login-box-msg">Silakan login untuk masuk</p>
 
+      {{-- Respon gagal login --}}
       @if($errors->any())
-          <div class="alert alert-danger">
-              {{ $errors->first('login_error') }}
+          <div class="alert alert-danger text-center">
+              <i class="fas fa-exclamation-circle"></i> {{ $errors->first('login_error') }}
           </div>
       @endif
 
@@ -43,6 +44,7 @@
           </div>
         </div>
 
+        <!-- IMEI wajib diisi sesuai seeder -->
         <div class="input-group mb-3">
           <input type="text" name="imei" class="form-control" placeholder="IMEI" required>
           <div class="input-group-append">
