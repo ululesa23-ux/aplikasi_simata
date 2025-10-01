@@ -83,8 +83,8 @@
                             <label class="form-label"><i class="bi bi-shield-lock me-1"></i> Role</label>
                             <select name="role" class="form-select" required>
                                 <option value="">-- Pilih Role --</option>
-                                <option value="guru" {{ old('role')=='guru' ? 'selected' : '' }}>Guru</option>
-                                <option value="Siswa" {{ old('role')=='siswa' ? 'selected' : '' }}>Siswa</option>
+                                <option value="guru" {{ old('role')'guru' ? 'selected' : '' }}>Guru</option>
+                                <option value="Siswa" {{ old('role')'siswa' ? 'selected' : '' }}>Siswa</option>
 
                             </select>
                         </div>
@@ -94,7 +94,7 @@
                             <select name="unit_id" class="form-select" required>
                                 <option value="">-- Pilih Unit --</option>
                                 @foreach($units as $unit)
-                                    <option value="{{ $unit->id }}" {{ old('unit_id')==$unit->id ? 'selected' : '' }}>
+                                    <option value="{{ $unit->id }}" {{ old('unit_id')$unit->id ? 'selected' : '' }}>
                                         {{ $unit->nama_unit }}
                                     </option>
                                 @endforeach
