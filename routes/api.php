@@ -18,57 +18,15 @@ use App\Http\Controllers\Api\PresensiController;
 use App\Http\Controllers\Api\LaporanPresensiController; // ✅ tambahan
 use App\Http\Controllers\Api\LaporanIjinController;     // ✅ tambahan
 
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'loginAplikasi']);
 
 // =========================
 // Berita
 // =========================
 Route::get('/berita', [BeritaController::class, 'getNews']);
 
-// =========================
-// Login & Register
-// =========================
 
-// sementara hardcode user array
-$users = [
-    [
-        'username' => 'admin',
-        'password' => 'admin123',
-        'imei'     => '000111222',
-        'role'     => 'admin'
-    ],
-  
-];
-
-// login (POST)
-Route::post('/login', function (Request $request) use (&$users) {
-    $username = $request->input('username');
-    $password = $request->input('password');
-    $imei     = $request->input('imei');
-
-    foreach ($users as $user) {
-        if (
-            $user['username'] === $username &&
-            $user['password'] === $password &&
-            $user['imei']     === $imei
-        ) {
-            return response()->json([
-                'status'  => 'success',
-                'message' => 'Login berhasil',
-                'data'    => [
-                    'username' => $user['username'],
-                    'role'     => $user['role'],
-                    'imei'     => $user['imei']
-                ]
-            ]);
-        }
-    }
-
-    return response()->json([
-        'status'  => 'error',
-        'message' => 'Login gagal, user tidak ditemukan atau data salah'
-    ], 401);
-});
+   
 
 // register
 Route::post('/register', [AuthController::class, 'register']);

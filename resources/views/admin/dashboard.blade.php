@@ -44,7 +44,8 @@
                             'admin' => [
                                 ['url' => '/admin/users', 'icon' => 'fas fa-users', 'label' => 'Kelola User'],
                                 ['url' => '/inventaris', 'icon' => 'fas fa-boxes', 'label' => 'Kelola Inventaris'],
-                                ['url' => '/doa', 'icon' => 'fas fa-praying-hands', 'label' => 'Kelola Doa'], // ✅ tambahan doa
+                                ['url' => '/doa', 'icon' => 'fas fa-praying-hands', 'label' => 'Kelola Doa'],
+                                ['url' => '/kalender', 'icon' => 'fas fa-calendar', 'label' => 'Kelola Kalender'], // ✅ Tambahan Kalender
                             ],
                             'tu' => [
                                 ['url' => '/kalender', 'icon' => 'fas fa-calendar', 'label' => 'Kelola Kalender'],
@@ -93,6 +94,9 @@
                                 </a>
                                 <a href="{{ url('/doa') }}" class="btn btn-warning mb-2">
                                     <i class="fas fa-praying-hands"></i> Kelola Doa
+                                </a>
+                                <a href="{{ url('/kalender') }}" class="btn btn-info mb-2">
+                                    <i class="fas fa-calendar"></i> Kelola Kalender
                                 </a>
                             @elseif(Auth::user()->role === 'tu')
                                 <a href="{{ url('/kalender') }}" class="btn btn-warning mb-2">

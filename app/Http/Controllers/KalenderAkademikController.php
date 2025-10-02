@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\KalenderAkademik;
+use App\Models\Unit;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 class KalenderAkademikController extends Controller
 {
-    // 📌 Ambil semua data
+    // ================== API (JSON) ==================
+
     public function index()
     {
         return response()->json([
@@ -17,7 +19,6 @@ class KalenderAkademikController extends Controller
         ]);
     }
 
-    // 📌 Tambah data baru
     public function store(Request $request)
     {
         try {
@@ -28,11 +29,6 @@ class KalenderAkademikController extends Controller
                 'jenis'           => 'nullable|string|max:50',
                 'keterangan'      => 'nullable|string',
                 'unit_id'         => 'required|exists:units,id',
-            ], [
-                'judul.required' => 'Judul wajib diisi.',
-                'tanggal_mulai.required' => 'Tanggal mulai wajib diisi.',
-                'unit_id.required' => 'Unit wajib diisi.',
-                'unit_id.exists' => 'Unit tidak ditemukan di database.'
             ]);
 
             $kalender = KalenderAkademik::create($validated);
@@ -51,7 +47,6 @@ class KalenderAkademikController extends Controller
         }
     }
 
-    // 📌 Detail 1 data
     public function show($id)
     {
         $kalender = KalenderAkademik::with('unit')->find($id);
@@ -69,7 +64,6 @@ class KalenderAkademikController extends Controller
         ]);
     }
 
-    // 📌 Update data
     public function update(Request $request, $id)
     {
         $kalender = KalenderAkademik::find($id);
@@ -107,7 +101,6 @@ class KalenderAkademikController extends Controller
         }
     }
 
-    // 📌 Hapus data
     public function destroy($id)
     {
         $kalender = KalenderAkademik::find($id);
@@ -125,5 +118,67 @@ class KalenderAkademikController extends Controller
             'status' => 'sukses',
             'pesan'  => 'Data berhasil dihapus'
         ]);
+    }
+
+    // ================== WEB (Blade) ==================
+
+    public function indexWeb()
+    {
+        $kalenders = KalenderAkademik::with('unit')->latest()->get();
+        return view('kalender.index', compact('kalenders'));
+    }
+
+    public function createWeb()
+    {
+        $units = Unit::all();
+        return view('kalender.create', compact('units'));
+    }
+
+    public function storeWeb(Request $request)
+    {
+        $request->validate([
+            'judul'           => 'required|string|max:255',
+            'tanggal_mulai'   => 'required|date',
+            'tanggal_selesai' => 'nullable|date|after_or_equal:tanggal_mulai',
+            'jenis'           => 'nullable|string|max:50',
+            'keterangan'      => 'nullable|string',
+            'unit_id'         => 'required|exists:units,id',
+        ]);
+
+        KalenderAkademik::create($request->all());
+
+        return redirect()->route('kalender.index')->with('success', 'Kalender berhasil ditambahkan!');
+    }
+
+    public function editWeb($id)
+    {
+        $kalender = KalenderAkademik::findOrFail($id);
+        $units = Unit::all();
+        return view('kalender.edit', compact('kalender', 'units'));
+    }
+
+    public function updateWeb(Request $request, $id)
+    {
+        $request->validate([
+            'judul'           => 'required|string|max:255',
+            'tanggal_mulai'   => 'required|date',
+            'tanggal_selesai' => 'nullable|date|after_or_equal:tanggal_mulai',
+            'jenis'           => 'nullable|string|max:50',
+            'keterangan'      => 'nullable|string',
+            'unit_id'         => 'required|exists:units,id',
+        ]);
+
+        $kalender = KalenderAkademik::findOrFail($id);
+        $kalender->update($request->all());
+
+        return redirect()->route('kalender.index')->with('success', 'Kalender berhasil diperbarui!');
+    }
+
+    public function destroyWeb($id)
+    {
+        $kalender = KalenderAkademik::findOrFail($id);
+        $kalender->delete();
+
+        return redirect()->route('kalender.index')->with('success', 'Kalender berhasil dihapus!');
     }
 }

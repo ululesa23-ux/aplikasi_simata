@@ -13,6 +13,7 @@ use App\Http\Controllers\UnitController;
 use App\Http\Controllers\TuController;
 use App\Http\Controllers\KabidController;
 use App\Http\Controllers\DoaController;
+use App\Http\Controllers\KalenderAkademikController;
 
 /*
 |--------------------------------------------------------------------------
@@ -108,3 +109,12 @@ Route::prefix('doa')->group(function () {
     Route::delete('/{id}', [DoaController::class, 'destroyWeb'])->name('doa.destroy'); // hapus doa
 });
 
+
+Route::prefix('kalender')->group(function () {
+    Route::get('/', [KalenderAkademikController::class, 'indexWeb'])->name('kalender.index');       // daftar kalender (Blade)
+    Route::get('/create', [KalenderAkademikController::class, 'createWeb'])->name('kalender.create'); // form tambah kalender
+    Route::post('/', [KalenderAkademikController::class, 'storeWeb'])->name('kalender.store');       // simpan kalender baru
+    Route::get('/{id}/edit', [KalenderAkademikController::class, 'editWeb'])->name('kalender.edit'); // form edit kalender
+    Route::put('/{id}', [KalenderAkademikController::class, 'updateWeb'])->name('kalender.update');  // update kalender
+    Route::delete('/{id}', [KalenderAkademikController::class, 'destroyWeb'])->name('kalender.destroy'); // hapus kalender
+});
