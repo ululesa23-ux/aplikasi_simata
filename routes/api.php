@@ -16,13 +16,11 @@ use App\Http\Controllers\DoaController;
 use App\Http\Controllers\Api\IjinController;
 use App\Http\Controllers\Api\PresensiController;
 use App\Http\Controllers\Api\LaporanPresensiController; // ✅ tambahan
-use App\Http\Controllers\Api\LaporanIjinController;     // ✅ tambahan
+
 
 Route::post('/login', [AuthController::class, 'loginAplikasi']);
 
-// =========================
-// Berita
-// =========================
+
 Route::get('/berita', [BeritaController::class, 'getNews']);
 
 

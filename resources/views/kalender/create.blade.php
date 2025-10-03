@@ -13,32 +13,44 @@
             <h4 class="mb-0"><i class="bi bi-calendar-plus me-2"></i> Tambah Kalender Akademik</h4>
         </div>
         <div class="card-body">
+
+            {{-- Error Handling --}}
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             <form action="{{ route('kalender.store') }}" method="POST">
                 @csrf
 
                 <div class="mb-3">
                     <label class="form-label"><i class="bi bi-type me-1"></i> Judul</label>
-                    <input type="text" name="judul" class="form-control" required>
+                    <input type="text" name="judul" class="form-control" value="{{ old('judul') }}" required>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label"><i class="bi bi-calendar-date me-1"></i> Tanggal Mulai</label>
-                    <input type="date" name="tanggal_mulai" class="form-control" required>
+                    <input type="date" name="tanggal_mulai" class="form-control" value="{{ old('tanggal_mulai') }}" required>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label"><i class="bi bi-calendar-date-fill me-1"></i> Tanggal Selesai</label>
-                    <input type="date" name="tanggal_selesai" class="form-control" required>
+                    <input type="date" name="tanggal_selesai" class="form-control" value="{{ old('tanggal_selesai') }}">
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label"><i class="bi bi-list-task me-1"></i> Jenis</label>
-                    <input type="text" name="jenis" class="form-control" required>
+                    <input type="text" name="jenis" class="form-control" value="{{ old('jenis') }}">
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label"><i class="bi bi-card-text me-1"></i> Keterangan</label>
-                    <textarea name="keterangan" class="form-control"></textarea>
+                    <textarea name="keterangan" class="form-control">{{ old('keterangan') }}</textarea>
                 </div>
 
                 <div class="mb-3">
@@ -46,7 +58,9 @@
                     <select name="unit_id" class="form-select" required>
                         <option value="">-- Pilih Unit --</option>
                         @foreach($units as $unit)
-                            <option value="{{ $unit->id }}">{{ $unit->nama_unit }}</option>
+                            <option value="{{ $unit->id }}" {{ old('unit_id') == $unit->id ? 'selected' : '' }}>
+                                {{ $unit->nama_unit }}
+                            </option>
                         @endforeach
                     </select>
                 </div>
