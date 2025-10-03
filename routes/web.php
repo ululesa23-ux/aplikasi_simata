@@ -14,21 +14,16 @@ use App\Http\Controllers\TuController;
 use App\Http\Controllers\KabidController;
 use App\Http\Controllers\DoaController;
 use App\Http\Controllers\KalenderAkademikController;
+use App\Http\Controllers\RekapanController;
 
-/*
-|--------------------------------------------------------------------------
-| Default Route
-|--------------------------------------------------------------------------
-*/
+
 Route::get('/', function () {
     return view('welcome');
 });
 
-/*
-|--------------------------------------------------------------------------
-| Utilities (Debugging)
-|--------------------------------------------------------------------------
-*/
+
+
+
 Route::get('/ping', fn () => 'pong');
 
 Route::get('/check-db', function () {
@@ -117,4 +112,12 @@ Route::prefix('kalender')->group(function () {
     Route::get('/{id}/edit', [KalenderAkademikController::class, 'editWeb'])->name('kalender.edit'); // form edit kalender
     Route::put('/{id}', [KalenderAkademikController::class, 'updateWeb'])->name('kalender.update');  // update kalender
     Route::delete('/{id}', [KalenderAkademikController::class, 'destroyWeb'])->name('kalender.destroy'); // hapus kalender
+});
+
+Route::prefix('rekapan')->group(function () {
+    // daftar semua unit
+    Route::get('/', [RekapanController::class, 'index'])->name('rekapan.index');
+
+    // detail rekapan per unit
+    Route::get('/{unit_id}', [RekapanController::class, 'show'])->name('rekapan.show');
 });

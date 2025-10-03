@@ -45,10 +45,12 @@
                                 ['url' => '/admin/users', 'icon' => 'fas fa-users', 'label' => 'Kelola User'],
                                 ['url' => '/inventaris', 'icon' => 'fas fa-boxes', 'label' => 'Kelola Inventaris'],
                                 ['url' => '/doa', 'icon' => 'fas fa-praying-hands', 'label' => 'Kelola Doa'],
-                                ['url' => '/kalender', 'icon' => 'fas fa-calendar', 'label' => 'Kelola Kalender'], // ✅ Tambahan Kalender
+                                ['url' => '/kalender', 'icon' => 'fas fa-calendar', 'label' => 'Kelola Kalender'],
+                                ['url' => '/rekapan', 'icon' => 'fas fa-clipboard-list', 'label' => 'Rekapan'],
                             ],
                             'tu' => [
                                 ['url' => '/kalender', 'icon' => 'fas fa-calendar', 'label' => 'Kelola Kalender'],
+                                ['url' => '/rekapan', 'icon' => 'fas fa-clipboard-list', 'label' => 'Rekapan'],
                             ],
                             'kabid' => [
                                 ['url' => '/verifikasi', 'icon' => 'fas fa-check-circle', 'label' => 'Verifikasi Data'],
@@ -97,6 +99,9 @@
                                 </a>
                                 <a href="{{ url('/kalender') }}" class="btn btn-info mb-2">
                                     <i class="fas fa-calendar"></i> Kelola Kalender
+                                    </a>
+    <a href="{{ url('/rekapan') }}" class="btn btn-dark mb-2">
+        <i class="fas fa-clipboard-list"></i> Rekapan
                                 </a>
                             @elseif(Auth::user()->role === 'tu')
                                 <a href="{{ url('/kalender') }}" class="btn btn-warning mb-2">
